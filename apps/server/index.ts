@@ -1,33 +1,40 @@
-const { ApolloServer, gql } = require("apollo-server");
-// type Schedule {
-//     id: ID!
-//     dayOfWeek: DaysOfWeek!
-//     address: string <- Should this be a string or a more complex type?
-//     open: Time!
-//     close: Time!
-//   }
+import { ApolloServer, gql } from "apollo-server";
+import { PrismaClient } from "@prisma/client";
 
-//   type Tag {
-//     id: ID!
-//     name: string!
-//   }
+const prisma = new PrismaClient();
 
-//   enum DaysOfWeek {
-//     SUNDAY
-//     MONDAY
-//     TUESDAY
-//     WEDNESDAY
-//     THURSDAY
-//     FRIDAY
-//     SATURDAY
-//   }
 const typeDefs = gql`
   type Truck {
     id: ID!
     name: String!
     description: String
-    # schedules: [Schedule!]
-    # tags: [Tag!]
+    schedules: [Schedule!]
+    tags: [Tag!]
+  }
+
+  type Schedule {
+    id: ID!
+    dayOfWeek: DaysOfWeek!
+    address: String
+    open: Int!
+    close: Int!
+    recurring: Boolean!
+    endOfRecurring: Int
+  }
+
+  type Tag {
+    id: ID!
+    name: String!
+  }
+
+  enum DaysOfWeek {
+    SUNDAY
+    MONDAY
+    TUESDAY
+    WEDNESDAY
+    THURSDAY
+    FRIDAY
+    SATURDAY
   }
 
   type Query {
@@ -36,21 +43,19 @@ const typeDefs = gql`
   }
 `;
 
-const trucks = [
-  { id: 1, name: "Rosari's", description: "Papusas" },
-  { id: 2, name: "Mary Ellen's", description: "Soul food" },
-];
-
 const resolvers = {
   Query: {
-    trucks: () => trucks,
-    truck: (id: number) => trucks.find((f) => f.id === id),
+    truck: (parent: any, args: any, context: any, info: any) =>
+      prisma.truck.findFirst({
+        where: { id: parseInt(args.id, 10) },
+        include: { schedules: true, tags: true },
+      }),
+    trucks: () =>
+      prisma.truck.findMany({ include: { schedules: true, tags: true } }),
   },
 };
 
-const {
-  ApolloServerPluginLandingPageLocalDefault,
-} = require("apollo-server-core");
+import { ApolloServerPluginLandingPageLocalDefault } from "apollo-server-core";
 
 const server = new ApolloServer({
   typeDefs,
@@ -67,6 +72,6 @@ const server = new ApolloServer({
   plugins: [ApolloServerPluginLandingPageLocalDefault({ embed: true })],
 });
 
-server.listen().then(({ url }) => {
+server.listen().then(({ url }: { url: string }) => {
   console.log(`🚀  Server ready at ${url}`);
 });

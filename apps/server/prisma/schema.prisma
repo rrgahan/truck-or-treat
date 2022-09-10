@@ -1,0 +1,35 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("PRISMA_DATABASE_URL")
+}
+
+model Truck {
+  id    Int     @id @default(autoincrement())
+  name  String  @unique
+  description String?
+  schedules Schedule[]
+  tags Tag[]
+}
+
+model Schedule {
+  id    Int     @id @default(autoincrement())
+  dayOfWeek   String
+  address   String
+  open  Int
+  close Int
+  recurring Boolean
+  endOfRecurring Int?
+  truck Truck @relation(fields: [truckId], references: [id])
+  truckId Int
+}
+
+model Tag {
+  id Int  @id @default(autoincrement())
+  name String
+  truck Truck @relation(fields: [truckId], references: [id])
+  truckId Int
+}
