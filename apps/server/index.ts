@@ -8,18 +8,15 @@ const typeDefs = gql`
     id: ID!
     name: String!
     description: String
+    isLive: Boolean
     schedules: [Schedule!]
     tags: [Tag!]
   }
 
   type Schedule {
     id: ID!
-    dayOfWeek: DaysOfWeek!
-    address: String
-    open: Int!
-    close: Int!
-    recurring: Boolean!
-    endOfRecurring: Int
+    address: String!
+    description: String!
   }
 
   type Tag {
@@ -27,19 +24,40 @@ const typeDefs = gql`
     name: String!
   }
 
-  enum DaysOfWeek {
-    SUNDAY
-    MONDAY
-    TUESDAY
-    WEDNESDAY
-    THURSDAY
-    FRIDAY
-    SATURDAY
-  }
-
   type Query {
     truck(id: ID!): Truck
-    trucks: [Truck]
+    trucks(onlyLive: Boolean): [Truck]
+  }
+
+  input UpsertTruckType {
+    name: String!
+    description: String
+  }
+
+  input SetLiveType {
+    id: ID!
+    isLive: Boolean!
+  }
+
+  input CreateScheduleType {
+    truckId: ID!
+    address: String!
+    description: String!
+  }
+
+  input UpdateScheduleType {
+    id: ID!
+    address: String!
+    description: String!
+  }
+
+  type Mutation {
+    upsertTruck(truck: UpsertTruckType): Truck!
+    setLive(setLiveInput: SetLiveType): Truck!
+    deleteTruck(id: ID!): ID
+    createSchedule(createScheduleInput: CreateScheduleType): Truck
+    updateSchedule(updateScheduleInput: UpdateScheduleType): Truck
+    deleteSchedule(id: ID!): Truck
   }
 `;
 
@@ -50,8 +68,65 @@ const resolvers = {
         where: { id: parseInt(args.id, 10) },
         include: { schedules: true, tags: true },
       }),
-    trucks: () =>
-      prisma.truck.findMany({ include: { schedules: true, tags: true } }),
+    trucks: (parent: any, args: any, context: any, info: any) => {
+      let whereClause = {};
+      if (args.onlyLive) {
+        whereClause = { isLive: true };
+      }
+      return prisma.truck.findMany({
+        where: whereClause,
+        include: { schedules: true, tags: true },
+      });
+    },
+  },
+  Mutation: {
+    upsertTruck: async (parent: any, args: any, context: any, info: any) =>
+      await prisma.truck.upsert({
+        where: { name: args.truck.name },
+        update: {
+          ...args.truck,
+        },
+        create: {
+          ...args.truck,
+        },
+      }),
+    setLive: async (parent: any, args: any, context: any, info: any) =>
+      await prisma.truck.update({
+        where: { id: args.setLiveInput.id },
+        data: {
+          isLive: args.setLiveInput.isLive,
+        },
+      }),
+    deleteTruck: async (parent: any, args: any, context: any, info: any) =>
+      (await prisma.truck.delete({ where: { id: args.id } })).id,
+    createSchedule: async (parent: any, args: any, context: any, info: any) => {
+      const schedule = await prisma.schedule.create({
+        data: {
+          address: args.createScheduleInput.address,
+          description: args.createScheduleInput.description,
+          truck: {
+            connect: { id: parseInt(args.createScheduleInput.truckId, 10) },
+          },
+        },
+        include: { truck: { include: { schedules: true } } },
+      });
+      return schedule?.truck;
+    },
+    updateSchedule: async (parent: any, args: any, context: any, info: any) => {
+      const schedule = await prisma.schedule.update({
+        where: { id: args.updateScheduleInput.id },
+        data: args.updateScheduleInput,
+        include: { truck: { include: { schedules: true } } },
+      });
+      return schedule?.truck;
+    },
+    deleteSchedule: async (parent: any, args: any, context: any, info: any) => {
+      const schedule = await prisma.schedule.delete({
+        where: { id: args.id },
+        include: { truck: { include: { schedules: true } } },
+      });
+      return schedule?.truck;
+    },
   },
 };
 

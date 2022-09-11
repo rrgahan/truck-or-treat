@@ -11,18 +11,15 @@ model Truck {
   id    Int     @id @default(autoincrement())
   name  String  @unique
   description String?
+  isLive Boolean @default(false)
   schedules Schedule[]
   tags Tag[]
 }
 
 model Schedule {
   id    Int     @id @default(autoincrement())
-  dayOfWeek   String
   address   String
-  open  Int
-  close Int
-  recurring Boolean
-  endOfRecurring Int?
+  description String
   truck Truck @relation(fields: [truckId], references: [id])
   truckId Int
 }

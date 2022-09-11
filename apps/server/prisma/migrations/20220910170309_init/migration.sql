@@ -2,18 +2,15 @@
 CREATE TABLE "Truck" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "name" TEXT NOT NULL,
-    "description" TEXT
+    "description" TEXT,
+    "isLive" BOOLEAN NOT NULL DEFAULT false
 );
 
 -- CreateTable
 CREATE TABLE "Schedule" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    "dayOfWeek" TEXT NOT NULL,
     "address" TEXT NOT NULL,
-    "open" INTEGER NOT NULL,
-    "close" INTEGER NOT NULL,
-    "recurring" BOOLEAN NOT NULL,
-    "endOfRecurring" INTEGER,
+    "description" TEXT NOT NULL,
     "truckId" INTEGER NOT NULL,
     CONSTRAINT "Schedule_truckId_fkey" FOREIGN KEY ("truckId") REFERENCES "Truck" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
