@@ -12,6 +12,7 @@ model Truck {
   name  String  @unique
   description String?
   isLive Boolean @default(false)
+  liveAddress String?
   schedules Schedule[]
   tags Tag[]
 }

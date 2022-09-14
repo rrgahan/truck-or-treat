@@ -9,6 +9,7 @@ const typeDefs = gql`
     name: String!
     description: String
     isLive: Boolean
+    liveAddress: String
     schedules: [Schedule!]
     tags: [Tag!]
   }
@@ -37,6 +38,7 @@ const typeDefs = gql`
   input SetLiveType {
     id: ID!
     isLive: Boolean!
+    liveAddress: String
   }
 
   input CreateScheduleType {
@@ -92,13 +94,14 @@ const resolvers = {
       }),
     setLive: async (parent: any, args: any, context: any, info: any) =>
       await prisma.truck.update({
-        where: { id: args.setLiveInput.id },
+        where: { id: parseInt(args.setLiveInput.id, 10) },
         data: {
           isLive: args.setLiveInput.isLive,
+          liveAddress: args.setLiveInput.liveAddress,
         },
       }),
     deleteTruck: async (parent: any, args: any, context: any, info: any) =>
-      (await prisma.truck.delete({ where: { id: args.id } })).id,
+      (await prisma.truck.delete({ where: { id: parseInt(args.id) } })).id,
     createSchedule: async (parent: any, args: any, context: any, info: any) => {
       const schedule = await prisma.schedule.create({
         data: {
@@ -114,7 +117,7 @@ const resolvers = {
     },
     updateSchedule: async (parent: any, args: any, context: any, info: any) => {
       const schedule = await prisma.schedule.update({
-        where: { id: args.updateScheduleInput.id },
+        where: { id: parseInt(args.updateScheduleInput.id, 10) },
         data: args.updateScheduleInput,
         include: { truck: { include: { schedules: true } } },
       });
@@ -122,7 +125,7 @@ const resolvers = {
     },
     deleteSchedule: async (parent: any, args: any, context: any, info: any) => {
       const schedule = await prisma.schedule.delete({
-        where: { id: args.id },
+        where: { id: parseInt(args.id) },
         include: { truck: { include: { schedules: true } } },
       });
       return schedule?.truck;
