@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, query, where } from "firebase/firestore";
 
 import { db } from "../App";
 import TruckCard from "../components/truck-card";
@@ -10,7 +10,9 @@ const Home = () => {
 
   useEffect(() => {
     async function getTrucks() {
-      const querySnapshot = await getDocs(collection(db, "truck"));
+      const querySnapshot = await getDocs(
+        query(collection(db, "truck"), where("isLive", "==", true))
+      );
       const data = [];
       querySnapshot.forEach((doc) => {
         data.push(doc.data());
