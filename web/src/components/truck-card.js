@@ -6,7 +6,7 @@ const TruckCard = ({ props: truck }) => {
       <p className="mt-0">
         <span className="font-italic">Now Live at:</span>
         <br />
-        {truck.liveAddress}
+        {truck.liveInfo.liveAddress}
       </p>
     </Card>
   );
