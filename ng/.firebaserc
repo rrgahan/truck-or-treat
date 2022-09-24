@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "truck-or-treat": {
+      "hosting": {
+        "ng": [
+          "truck-or-treat"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "truck-or-treat"
+  }
+}
