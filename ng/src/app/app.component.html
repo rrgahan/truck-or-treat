@@ -1,5 +1,17 @@
 <div class="bg-primary min-h-screen px-6 py-4">
-  <h1>Truck Or Treat</h1>
+  <div class="flex justify-content-between">
+    <h1>
+      <a routerLink="/" class="no-underline text-white">Truck Or Treat</a>
+    </h1>
+    <a
+      routerLink="owner"
+      pButton
+      pRipple
+      type="button"
+      label="Owner Portal"
+      class="no-underline"
+    ></a>
+  </div>
   <p-divider></p-divider>
 
   <router-outlet></router-outlet>
