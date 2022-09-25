@@ -13,11 +13,9 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.store
-      .collection('truck')
+      .collection('truck', (ref) => ref.where('isLive', '==', true))
       .valueChanges()
-      .pipe(
-        tap((trucks) => (this.trucks = trucks.filter((f: any) => f.isLive)))
-      )
+      .pipe(tap((trucks) => (this.trucks = trucks)))
       .subscribe();
   }
 }

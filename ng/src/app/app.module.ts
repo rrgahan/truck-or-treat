@@ -2,6 +2,7 @@ import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
+import { InputSwitchModule } from 'primeng/inputswitch';
 
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
@@ -31,6 +32,7 @@ import { LoginComponent } from './pages/login/login.component';
     ButtonModule,
     CardModule,
     DividerModule,
+    InputSwitchModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

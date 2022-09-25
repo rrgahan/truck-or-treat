@@ -6,6 +6,7 @@ import { Component, Input, OnInit } from '@angular/core';
   styleUrls: ['./truck-card.component.scss'],
 })
 export class TruckCardComponent implements OnInit {
+  @Input() public editable = false;
   @Input() public truck: any;
 
   constructor() {}

@@ -1,8 +1,25 @@
-<p>owner works!</p>
-<button
-  pButton
-  pRipple
-  type="button"
-  label="Log Out"
-  (click)="logout()"
-></button>
+<div class="flex justify-content-end">
+  <button
+    pButton
+    pRipple
+    type="button"
+    label="Log Out"
+    (click)="logout()"
+  ></button>
+</div>
+
+<div *ngIf="!isOwner">
+  <p>
+    Please contact
+    <a href="mailto:hello@truck-or-treat.com">hello@truck-or-treat.com</a> to
+    add your truck to the site!
+  </p>
+</div>
+
+<div *ngIf="isOwner && !trucks.length">Loading...</div>
+
+<div class="grid mt-4">
+  <div *ngFor="let truck of trucks" class="lg:col-4">
+    <app-truck-card [editable]="true" [truck]="truck"></app-truck-card>
+  </div>
+</div>

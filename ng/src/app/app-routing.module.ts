@@ -17,7 +17,7 @@ const routes: Routes = [
   {
     path: 'owner',
     component: OwnerComponent,
-    canActivate: [AuthGuard],
+    // canActivate: [AuthGuard],
   },
 ];
 
