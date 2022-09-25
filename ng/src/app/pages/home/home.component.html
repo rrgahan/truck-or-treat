@@ -1,5 +1,13 @@
+<div [formGroup]="queryFormGroup" class="mb-4">
+  <input
+    type="text"
+    pInputText
+    placeholder="Filter Trucks by Name"
+    formControlName="searchText"
+  />
+</div>
 <div class="grid">
-  <div *ngFor="let truck of trucks" class="lg:col-4">
+  <div *ngFor="let truck of trucksToDisplay" class="lg:col-4">
     <app-truck-card [truck]="truck"></app-truck-card>
   </div>
 </div>

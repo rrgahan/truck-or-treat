@@ -1,6 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { filter, forkJoin, from, mergeAll, tap } from 'rxjs';
+import {
+  filter,
+  forkJoin,
+  from,
+  mergeAll,
+  Subject,
+  takeUntil,
+  tap,
+} from 'rxjs';
 import { AuthService } from 'src/app/service/auth.service';
 
 @Component({
@@ -8,11 +16,13 @@ import { AuthService } from 'src/app/service/auth.service';
   templateUrl: './owner.component.html',
   styleUrls: ['./owner.component.scss'],
 })
-export class OwnerComponent implements OnInit {
+export class OwnerComponent implements OnDestroy, OnInit {
   public isOwner = false;
   public trucks: any[] = [];
 
+  private destroy$: Subject<boolean> = new Subject();
   private owner: any;
+
   constructor(
     private store: AngularFirestore,
     private authService: AuthService
@@ -22,7 +32,12 @@ export class OwnerComponent implements OnInit {
     await this.authService.logout();
   }
 
-  ngOnInit(): void {
+  public ngOnDestroy(): void {
+    this.destroy$.next(true);
+    this.destroy$.complete();
+  }
+
+  public ngOnInit(): void {
     const ownerEmail = this.authService.user?.email ?? 'test@example.com';
     this.loadTrucksForOwner(ownerEmail);
   }
@@ -32,6 +47,7 @@ export class OwnerComponent implements OnInit {
       .collection('owners', (ref) => ref.where('email', '==', ownerEmail))
       .valueChanges()
       .pipe(
+        takeUntil(this.destroy$),
         filter((owners) => {
           this.isOwner = !!owners.length;
           return this.isOwner;
