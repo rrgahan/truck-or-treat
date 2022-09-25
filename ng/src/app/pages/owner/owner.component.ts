@@ -41,7 +41,7 @@ export class OwnerComponent implements OnInit {
           const trucks = [];
           for (let truck of this.owner.trucks) {
             const truckData = (await truck.get()).data();
-            trucks.push(truckData);
+            trucks.push({ ...truckData, id: truck.id });
           }
           this.trucks = trucks;
         })

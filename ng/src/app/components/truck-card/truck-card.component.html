@@ -1,10 +1,10 @@
-<p-card styleClass="surface-ground">
+<p-card [formGroup]="truckFormGroup" styleClass="surface-ground">
   <ng-template pTemplate="title">
     <div class="flex justify-content-between align-items-center">
       {{ truck.name }}
       <div *ngIf="editable" class="flex align-items-center">
         <label class="font-normal text-base pr-2">Is Live?</label>
-        <p-inputSwitch></p-inputSwitch>
+        <p-inputSwitch formControlName="isLive"></p-inputSwitch>
       </div>
     </div>
   </ng-template>
@@ -12,7 +12,27 @@
     {{ truck.description }}
   </ng-template>
   <div *ngIf="truck.isLive">
-    <p class="italic">Currently live at:</p>
-    <p>{{ truck.liveAddress }}</p>
+    <p class="font-italic mb-0">Currently live at:</p>
+    <p class="mt-0">{{ truck.liveAddress }}</p>
   </div>
 </p-card>
+
+<p-dialog
+  header="Tell the people where you are!"
+  [(visible)]="shouldShowAddressDialog"
+  [modal]="true"
+  [draggable]="false"
+>
+  <div [formGroup]="truckFormGroup" class="flex flex-column">
+    <label class="pb-2">Live Address/Location</label>
+    <input type="text" pInputText formControlName="liveAddress" />
+    <button
+      pButton
+      pRipple
+      type="button"
+      label="Save"
+      (click)="save()"
+      class="mt-2"
+    ></button>
+  </div>
+</p-dialog>
