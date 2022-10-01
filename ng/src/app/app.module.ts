@@ -21,6 +21,7 @@ import { TruckCardComponent } from './components/truck-card/truck-card.component
 import { environment } from 'src/environments/environment';
 import { OwnerComponent } from './pages/owner/owner.component';
 import { LoginComponent } from './pages/login/login.component';
+import { UpsertTruckComponent } from './components/upsert-truck/upsert-truck.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import { LoginComponent } from './pages/login/login.component';
     TruckCardComponent,
     OwnerComponent,
     LoginComponent,
+    UpsertTruckComponent,
   ],
   imports: [
     AngularFireModule.initializeApp(environment.firebase),

@@ -33,6 +33,7 @@
         <div class="flex justify-content-between align-items-center">
           Add Another Truck
           <button
+            (click)="addTruck()"
             pButton
             pRipple
             type="button"
@@ -44,3 +45,12 @@
     </p-card>
   </div>
 </div>
+
+<p-dialog
+  header="Add a truck"
+  [(visible)]="shouldShowUpsertTruckDialog"
+  [modal]="true"
+  [draggable]="false"
+>
+  <app-upsert-truck></app-upsert-truck>
+</p-dialog>

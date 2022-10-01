@@ -2,6 +2,7 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Subject, takeUntil, tap } from 'rxjs';
+import { Truck } from 'src/app/models/truck';
 
 @Component({
   selector: 'app-truck-card',
@@ -10,7 +11,7 @@ import { Subject, takeUntil, tap } from 'rxjs';
 })
 export class TruckCardComponent implements OnDestroy, OnInit {
   @Input() public editable = false;
-  @Input() public truck: any;
+  @Input() public truck!: Truck;
 
   public shouldShowAddressDialog = false;
   public truckFormGroup: FormGroup = new FormGroup({

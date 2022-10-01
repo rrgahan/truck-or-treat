@@ -24,8 +24,13 @@
   [draggable]="false"
 >
   <div [formGroup]="truckFormGroup" class="flex flex-column">
-    <label class="pb-2">Live Address/Location</label>
-    <input type="text" pInputText formControlName="liveAddress" />
+    <label for="liveAddress" class="pb-2">Live Address/Location</label>
+    <input
+      type="text"
+      id="liveAddress"
+      pInputText
+      formControlName="liveAddress"
+    />
     <button
       pButton
       pRipple

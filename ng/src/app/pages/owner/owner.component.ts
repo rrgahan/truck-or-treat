@@ -19,6 +19,7 @@ import { AuthService } from 'src/app/service/auth.service';
 export class OwnerComponent implements OnDestroy, OnInit {
   public isOwner = false;
   public trucks: any[] = [];
+  public shouldShowUpsertTruckDialog: boolean = false;
 
   private destroy$: Subject<boolean> = new Subject();
   private owner: any;
@@ -27,6 +28,10 @@ export class OwnerComponent implements OnDestroy, OnInit {
     private store: AngularFirestore,
     private authService: AuthService
   ) {}
+
+  public addTruck() {
+    this.shouldShowUpsertTruckDialog = true;
+  }
 
   public async logout() {
     await this.authService.logout();
@@ -39,7 +44,7 @@ export class OwnerComponent implements OnDestroy, OnInit {
 
   public ngOnInit(): void {
     const ownerEmail = this.authService.user?.email ?? 'test@example.com';
-    this.loadTrucksForOwner(ownerEmail);
+    // this.loadTrucksForOwner(ownerEmail);
   }
 
   private loadTrucksForOwner(ownerEmail: string) {
