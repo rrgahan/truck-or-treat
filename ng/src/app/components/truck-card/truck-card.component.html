@@ -4,6 +4,7 @@
       <span>
         {{ truck.name }}
         <button
+          *ngIf="editable"
           (click)="editTruck()"
           pButton
           pRipple

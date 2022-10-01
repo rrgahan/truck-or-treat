@@ -43,7 +43,11 @@ export class OwnerComponent implements OnDestroy, OnInit {
   }
 
   public ngOnInit(): void {
-    const ownerEmail = this.authService.user?.email ?? 'rrgahan@gmail.com';
+    const ownerEmail = this.authService.user?.email;
+    if (!ownerEmail) {
+      this.isOwner = false;
+      return;
+    }
     this.loadTrucksForOwner(ownerEmail);
   }
 
@@ -60,8 +64,8 @@ export class OwnerComponent implements OnDestroy, OnInit {
         ],
       });
     this.shouldShowUpsertTruckDialog = false;
-    const ownerEmail = this.authService.user?.email ?? 'test@example.com';
-    this.loadTrucksForOwner(ownerEmail);
+    const ownerEmail = this.authService.user?.email;
+    // this.loadTrucksForOwner(ownerEmail);
   }
 
   private loadTrucksForOwner(ownerEmail: string) {
