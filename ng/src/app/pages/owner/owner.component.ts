@@ -43,8 +43,25 @@ export class OwnerComponent implements OnDestroy, OnInit {
   }
 
   public ngOnInit(): void {
+    const ownerEmail = this.authService.user?.email ?? 'rrgahan@gmail.com';
+    this.loadTrucksForOwner(ownerEmail);
+  }
+
+  public updateOwner(documentReference: any) {
+    this.store
+      .collection('owners')
+      // TODO: This id isn't right
+      .doc(this.owner.id)
+      .update({
+        trucks: [
+          ...this.owner.trucks,
+          // TODO: This isn't right
+          this.store.doc(`/truck/${documentReference.id}`),
+        ],
+      });
+    this.shouldShowUpsertTruckDialog = false;
     const ownerEmail = this.authService.user?.email ?? 'test@example.com';
-    // this.loadTrucksForOwner(ownerEmail);
+    this.loadTrucksForOwner(ownerEmail);
   }
 
   private loadTrucksForOwner(ownerEmail: string) {

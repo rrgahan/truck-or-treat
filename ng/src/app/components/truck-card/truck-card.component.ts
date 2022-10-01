@@ -12,6 +12,7 @@ import { Truck } from 'src/app/models/truck';
 export class TruckCardComponent implements OnDestroy, OnInit {
   @Input() public editable = false;
   @Input() public truck!: Truck;
+  public shouldShowUpsertTruckDialog: boolean = false;
 
   public shouldShowAddressDialog = false;
   public truckFormGroup: FormGroup = new FormGroup({
@@ -22,6 +23,10 @@ export class TruckCardComponent implements OnDestroy, OnInit {
   private destroy$: Subject<boolean> = new Subject();
 
   constructor(private store: AngularFirestore) {}
+
+  public editTruck() {
+    this.shouldShowUpsertTruckDialog = true;
+  }
 
   public ngOnDestroy(): void {
     this.destroy$.next(true);
@@ -43,6 +48,17 @@ export class TruckCardComponent implements OnDestroy, OnInit {
         })
       )
       .subscribe();
+  }
+
+  public async refreshData() {
+    this.store
+      .collection('truck')
+      .doc(this.truck.id)
+      .get()
+      .pipe(tap((t) => (this.truck = t.data() as Truck)))
+      .subscribe();
+
+    this.shouldShowUpsertTruckDialog = false;
   }
 
   public async save() {

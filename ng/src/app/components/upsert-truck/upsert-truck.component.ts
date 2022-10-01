@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Truck } from 'src/app/models/truck';
@@ -10,6 +10,7 @@ import { Truck } from 'src/app/models/truck';
 })
 export class UpsertTruckComponent implements OnInit {
   @Input() truckToUpdate!: Truck;
+  @Output() savedTruck: EventEmitter<any> = new EventEmitter();
 
   public truckFormGroup: FormGroup = new FormGroup({
     name: new FormControl(''),
@@ -26,13 +27,17 @@ export class UpsertTruckComponent implements OnInit {
   }
 
   public async save() {
+    let reference;
     if (this.truckToUpdate) {
       await this.store
         .collection('truck')
         .doc(this.truckToUpdate.id)
         .update(this.truckFormGroup.value);
     } else {
-      await this.store.collection('truck').add(this.truckFormGroup.value);
+      reference = await this.store
+        .collection('truck')
+        .add(this.truckFormGroup.value);
     }
+    this.savedTruck.emit(reference);
   }
 }
