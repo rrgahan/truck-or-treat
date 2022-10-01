@@ -4,4 +4,5 @@ export type Truck = {
   isLive: boolean;
   liveAddress: string;
   name: string;
+  tags: string[];
 };

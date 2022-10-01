@@ -15,6 +15,10 @@
     <p class="font-italic mb-0">Currently live at:</p>
     <p class="mt-0">{{ truck.liveAddress }}</p>
   </div>
+  <div *ngIf="truck.tags.length">
+    <p>Tags:</p>
+    <p-chip *ngFor="let tag of truck.tags" [label]="tag" class="pr-2"></p-chip>
+  </div>
 </p-card>
 
 <p-dialog

@@ -7,6 +7,7 @@ import { InputTextModule } from 'primeng/inputtext';
 
 import { DialogModule } from 'primeng/dialog';
 import { ChipsModule } from 'primeng/chips';
+import { ChipModule } from 'primeng/chip';
 
 import { ReactiveFormsModule } from '@angular/forms';
 
@@ -41,6 +42,7 @@ import { UpsertTruckComponent } from './components/upsert-truck/upsert-truck.com
     BrowserAnimationsModule,
     ButtonModule,
     CardModule,
+    ChipModule,
     ChipsModule,
     DialogModule,
     DividerModule,
