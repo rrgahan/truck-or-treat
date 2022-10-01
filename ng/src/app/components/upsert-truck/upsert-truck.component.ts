@@ -10,9 +10,11 @@ import { Truck } from 'src/app/models/truck';
 })
 export class UpsertTruckComponent implements OnInit {
   @Input() truckToUpdate!: Truck;
+
   public truckFormGroup: FormGroup = new FormGroup({
     name: new FormControl(''),
     description: new FormControl(''),
+    tags: new FormControl(''),
   });
 
   constructor(private store: AngularFirestore) {}
