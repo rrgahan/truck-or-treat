@@ -27,4 +27,20 @@
   <div *ngFor="let truck of trucks" class="lg:col-4">
     <app-truck-card [editable]="true" [truck]="truck"></app-truck-card>
   </div>
+  <div class="lg:col-4">
+    <p-card styleClass="surface-ground h-full">
+      <ng-template pTemplate="title">
+        <div class="flex justify-content-between align-items-center">
+          Add Another Truck
+          <button
+            pButton
+            pRipple
+            type="button"
+            icon="pi pi-plus"
+            class="p-button-rounded"
+          ></button>
+        </div>
+      </ng-template>
+    </p-card>
+  </div>
 </div>
